@@ -1,9 +1,21 @@
 #
 # Setting up a server with git-annex non-bare repos to publish the annexed files
 #
-# The files once pushed will always remain on the server as git-start.sh blocks
+# The files once copied will always remain on the server as git-start.sh blocks
 # git annex to delete data from annexed files
 #
+# - no need to duplicate files
+# - symlinks of annexed files stay valid
+# - no copied data gets deleted from the server
+#
+# TODO:
+# - create scripts for:
+#	- adding/removing a user
+#	- creating a repository
+# - post-receive: recognize when a file gets annexed and inform the user to not
+#   forget to run "git annex copy --to origin"
+# - git-start.sh: make it possible to have the repositories located in a subdirectory
+#   instead of directly in the home directory of the git user.
 
 
 # setup
