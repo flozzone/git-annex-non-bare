@@ -1,0 +1,25 @@
+#!/bin/bash
+
+#
+# Create master branch to track synced/master (if necessary)
+# and keep the working directory updated to master after every push
+#
+
+# check if we are in .git directory
+if echo $(pwd) | grep -q "\.git$" ; then
+	cd ..
+	export GIT_DIR=$(pwd)/.git
+	export GIT_WORK_TREE=$(pwd)
+fi
+
+# check if there is a master branch,
+#  if not create it and let it track synced/master
+if ! git show-ref --verify --quiet refs/heads/master ; then
+	echo "Create master branch to track synced/master"
+	git checkout -t synced/master
+fi
+
+# checkout and merge in synced/master
+echo "Update master branch"
+git checkout master -q
+git merge synced/master
