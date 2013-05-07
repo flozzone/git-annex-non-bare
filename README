@@ -1,28 +1,44 @@
-#
-# Setting up a server with git-annex non-bare repos to publish the annexed files
-#
-# The files once copied will always remain on the server as git-start.sh blocks
-# git annex to delete data from annexed files
-#
-# - no need to duplicate files
-# - symlinks of annexed files stay valid
-# - no copied data gets deleted from the server
-#
-# TODO:
-# - create scripts for:
-#	- adding/removing a user
-#	- creating a repository
-# - post-receive: recognize when a file gets annexed and inform the user to not
-#   forget to run "git annex copy --to origin". Othewise the published data gets corrupt
-# - WARNING: ---> Published data is corrupt in the time between the client issues the commands
-#	"git annex sync" and "git annex copy --to origin"
-# - git-start.sh: make it possible to have the repositories located in a subdirectory
-#   instead of directly in the home directory of the git user.
+Setting up a server with git-annex non-bare repos to publish the annexed files
 
+The files once copied will always remain on the server as git-start.sh blocks
+git annex to delete data from annexed files
 
-# setup
+- no need to duplicate files
+- symlinks of annexed files stay valid
+- no copied data gets deleted from the server
+
+####################
+# TODO
+####################
+ - create scripts for:
+	- adding/removing a user
+	- creating a repository
+ - post-receive: recognize when a file gets annexed and inform the user to not
+   forget to run "git annex copy --to origin". Othewise the published data gets corrupt
+ - git-start.sh: make it possible to have the repositories located in a subdirectory
+   instead of directly in the home directory of the git user.
+ - create gitolite like administration
+
+####################
+# DRAWBACKS
+####################
+ - published data is corrupt in the time between the client issues the commands
+   "git annex sync" and "git annex copy --to origin". Because the symlinks of annexed
+   files will be broken.
+ - managing users can only be done by manually editing the file
+ - cannot be driven with a default gitolite installation as it has only bare repos and
+   if you would do:
+	- git config core.bare false
+	- change GIT_WORKDIR to another directory
+   it would result in broken annexed file links. (needs to be further tested)
+
+####################
+# SETUP
+####################
 sudo apt-get install git-core
 sudo apt-get install git-annex
+
+- The following steps assume you have checked this repo in /tmp/git-annex-non-bare
 
 - Add a user to your system
 sudo adduser git
@@ -34,19 +50,30 @@ sudo chown -R git:git /home/git/.ssh
 sudo chmod 700 /home/git/.ssh
 sudo chmod 600 /home/git/.ssh/*
 
-- Copy git-start.sh script over
-sudo cp /tmp/git-annex-non-bare/git-start.sh /home/git/
-sudo chown git:git /home/git/.ssh/git-start.sh
+- Copy git-start.sh script over and rest for later usage
+sudo cp /tmp/git-annex-non-bare/* /home/git
+sudo chown git:git /home/git/*
 
-# add a user into authorized_keys
+####################
+# ADD A USER TO GET ACCESS TO THE REPOSITORIES
+####################
 sudo vim /home/git/.ssh/authorized_keys
 
-a line for every user
+- a single line for every user
 -----------
 command="~/git-start.sh",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty [HERE COMES THE PUBLIC KEY OF THE USER TO ADD]
 -----------
 
-# add a repository
+- this will block the user to get a shell and restrict to only use git
+
+example:
+-----------
+command="~/git-start.sh",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwStpCbxttFD7YE/XspmaoGLEo09VcFobIDgu/+pk/ncDxQwLsWEySybAQN8GJ0EB9AFcIudZFVBLVbSvh3RJ8M6nOT/t67briZNd9BAVTFAUHdzGTZhNL7fvpWaEzQ095BCWi6k9Ol9XgBs5pjrJgMX+Jw6+g0ZWE0CBzPllt4dZoQEXMagi0uocSDgWtVYI08LKdj/QUCjtJYKDIOujRNP8sv/+WZ0gVhu9ENwTzJg6SJV0p2cfHuS9P9Qe9NxQ3XwQcvVXzPUVazInrb+I9S4lZGPPPTYTDcORmwkhvdgBBrKYytsJmkXKh/3S88Sd1bHm3Wr8bYy+Axt601yyF flozzone@gmail.com
+-----------
+
+####################
+# ADD A REPOSITORY
+####################
 login git
 cd
 mkdir my-repo.git
@@ -54,10 +81,15 @@ cd my-repo.git
 git init
 git annex init "server"
 
-- Copy the post-receive hook in the right place
-cp /tmp/post-receive .git/hooks 
+- copy the post-receive hook in the right place
+sudo cp ~/post-receive .git/hooks 
 
-# checking out the repository from a client
+- be sure that it is executable
+chmod +x .git/hooks/post-receive
+
+####################
+# CHECKOUT AND WORK WITH THE REPOSITORY
+####################
 git clone git@localhost:my-repo.git
 cd my-repo
 git annex init "my-username"
@@ -69,4 +101,3 @@ git commit -m test
 git annex sync
 git annex copy --to origin
 git annex drop .
-
