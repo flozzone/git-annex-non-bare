@@ -11,14 +11,14 @@ git annex to delete data from annexed files
 # TODO
 ####################
  - spcial: Add check for broken symlinks in the repo:
-	client hook: Needs to be installed by the client
-	server hook: Possibility of corrupted data while testing (possible solution
-		check out into another directory and check the files and links there.)
+     client hook: Needs to be installed by the client
+     server hook: Possibility of corrupted data while testing (possible solution
+     check out into another directory and check the files and links there.)
  - special: pre-update hook to check commit message for "automatic annex commit" and block pushing
  - special: client post-commit hook to run "git annex copy --to origin" right after "git annex sync"
  - create scripts for:
-	- adding/removing a user
-	- creating a repository
+     - adding/removing a user
+     - creating a repository
  - post-receive: recognize when a file gets annexed and inform the user to not
    forget to run "git annex copy --to origin". Othewise the published data gets corrupt
  - git-start.sh: make it possible to have the repositories located in a subdirectory
@@ -34,8 +34,8 @@ git annex to delete data from annexed files
  - managing users can only be done by manually editing the file
  - cannot be driven with a default gitolite installation as it has only bare repos and
    if you would do:
-	- git config core.bare false
-	- change GIT_WORKDIR to another directory
+      - git config core.bare false
+      - change GIT_WORKDIR to another directory
    it would result in broken annexed file links. (needs to be further tested)
 
 ####################
