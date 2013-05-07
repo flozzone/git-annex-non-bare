@@ -13,7 +13,9 @@
 #	- adding/removing a user
 #	- creating a repository
 # - post-receive: recognize when a file gets annexed and inform the user to not
-#   forget to run "git annex copy --to origin"
+#   forget to run "git annex copy --to origin". Othewise the published data gets corrupt
+# - WARNING: ---> Published data is corrupt in the time between the client issues the commands
+#	"git annex sync" and "git annex copy --to origin"
 # - git-start.sh: make it possible to have the repositories located in a subdirectory
 #   instead of directly in the home directory of the git user.
 
