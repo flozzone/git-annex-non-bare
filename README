@@ -10,6 +10,12 @@ git annex to delete data from annexed files
 ####################
 # TODO
 ####################
+ - spcial: Add check for broken symlinks in the repo:
+	client hook: Needs to be installed by the client
+	server hook: Possibility of corrupted data while testing (possible solution
+		check out into another directory and check the files and links there.)
+ - special: pre-update hook to check commit message for "automatic annex commit" and block pushing
+ - special: client post-commit hook to run "git annex copy --to origin" right after "git annex sync"
  - create scripts for:
 	- adding/removing a user
 	- creating a repository
