@@ -2,6 +2,31 @@
 
 Add a user to get access to the repositories (a single line for every user)
 
+AUTOMATICALLY - RECOMMENDED
+
+- save the public key of the user to add as organizer under a meaningful name and let it end with *.pub.
+e.g. max.mustermann.pub
+
+- transfer the key of the user on the server under its /tmp directory. 
+
+- login on the machine
+
+  # sudo su git
+  # cd
+  # cd git-annex-non-bare
+
+- copy the public key into the right location on the server
+
+  # cp /tmp/max.mustermann.pub keydir
+
+- run the user update script
+
+  # ./update-users.sh
+
+- this will generate the authorized_keys file for you
+
+MANUALLY - NOT RECOMMENDED
+
   # sudo vim /home/git/.ssh/authorized_keys
 
   -----------
@@ -17,6 +42,21 @@ Add a user to get access to the repositories (a single line for every user)
 
 Add a repository
 
+AUTOMATICALLY - RECOMMENDED
+
+- login on the machine
+
+  # sudo su git
+  # cd
+  # cd git-annex-non-bare
+
+- create the repository
+
+  # create-repo.sh my-repo
+
+
+MANUALLY - NOT RECOMMENDED
+
   # sudo su git
   # cd
   # mkdir my-repo.git
@@ -24,6 +64,7 @@ Add a repository
   # git init
   # git annex init "server"
 
-- link the post receive hook for new project
+- link the pre-/post-receive hook for new project
 
   #  ln -s ~/git-annex-non-bare/post-receive .git/hooks/post-receive
+  #  ln -s ~/git-annex-non-bare/pre-receive .git/hooks/pre-receive

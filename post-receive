@@ -5,12 +5,9 @@
 # and keep the working directory updated to master after every push
 #
 
-# check if we are in .git directory
-if echo $(pwd) | grep -q "\.git$" ; then
-	cd ..
-	export GIT_DIR=$(pwd)/.git
-	export GIT_WORK_TREE=$(pwd)
-fi
+# change into working directory
+cd ..
+unset GIT_DIR
 
 # check if there is a master branch,
 #  if not create it and let it track synced/master

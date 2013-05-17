@@ -2,7 +2,7 @@
 
 Installing the test-content service. (Adapted from git-annex-non-bare/README)
 
-* ssh to sue@contentserver
+* ssh to the machine
 
 * install utils.
 

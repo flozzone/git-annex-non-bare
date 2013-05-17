@@ -1,0 +1,4 @@
+Put the ssh public keys for the organizers into this directory and name them respectively. Only files
+with the extension *.pub will be added as organizers.
+
+e.g. name.surname.pub

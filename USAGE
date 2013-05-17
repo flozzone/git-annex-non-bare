@@ -26,15 +26,17 @@ Checkout and work with the repository
   # git commit -m test
 
   # NOTICE: Don't use push to push your changes to the server. Use "git annex sync" instead, it will do
-  # the push for you.
+  # the rest for you.
 
-- push your changes to git stuff (data is not copied)
-
-  # git annex sync
-
-- copy added data to the origin server (data gets copied to the server)
+- copy added data to the origin server
 
   # git annex copy --to origin
+
+- push your repository changes to origin  (data is not copied). If you run this before copying
+data on the server, it will return an error and reject the push. If everthing is ok this command will update
+the remote working directory.
+
+  # git annex sync
 
 - drop uploaded files from local machine (data gets deleted from local machine but is still on the server)
 
