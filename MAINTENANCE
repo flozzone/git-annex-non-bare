@@ -1,0 +1,29 @@
+---------------------------------------------------------
+
+Add a user to get access to the repositories (a single line for every user)
+
+  # sudo vim /home/git/.ssh/authorized_keys
+
+  -----------
+  command="~/git-annex-non-bare/git-start.sh",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty [HERE COMES THE PUBLIC KEY OF THE USER TO ADD]
+  -----------
+
+  example:
+  -----------
+  command="~/git-annex-non-bare/git-start.sh",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwStpCbxttFD7YE/XspmaoGLEo09VcFobIDgu/+pk/ncDxQwLsWEySybAQN8GJ0EB9AFcIudZFVBLVbSvh3RJ8M6nOT/t67briZNd9BAVTFAUHdzGTZhNL7fvpWaEzQ095BCWi6k9Ol9XgBs5pjrJgMX+Jw6+g0ZWE0CBzPllt4dZoQEXMagi0uocSDgWtVYI08LKdj/QUCjtJYKDIOujRNP8sv/+WZ0gVhu9ENwTzJg6SJV0p2cfHuS9P9Qe9NxQ3XwQcvVXzPUVazInrb+I9S4lZGPPPTYTDcORmwkhvdgBBrKYytsJmkXKh/3S88Sd1bHm3Wr8bYy+Axt601yyF flozzone@gmail.com
+  -----------
+
+---------------------------------------------------------
+
+Add a repository
+
+  # sudo su git
+  # cd
+  # mkdir my-repo.git
+  # cd my-repo.git
+  # git init
+  # git annex init "server"
+
+- link the post receive hook for new project
+
+  #  ln -s ~/git-annex-non-bare/post-receive .git/hooks/post-receive

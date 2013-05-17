@@ -1,0 +1,33 @@
+---------------------------------------------------------
+
+Installing the test-content service. (Adapted from git-annex-non-bare/README)
+
+* ssh to sue@contentserver
+
+* install utils.
+
+  # sudo apt-get install git-core git-annex
+
+* add git user to the system
+
+  # sudo useradd --shell /bin/bash git
+
+* create home folder
+
+  # sudo mkdir -p /home/git
+  # sudo cp -r /tmp/git-annex-non-bare/ /home/git
+  # sudo chown git:git /home/git/*
+
+* create ssh folder and authorized_keys file
+
+  # sudo mkdir -p /home/git/.ssh
+  # sudo touch /home/git/.ssh/authorized_keys
+  # sudo chmod 700 /home/git/.ssh
+  # sudo chmod 600 /home/git/.ssh/authorized_keys 
+  # sudo chown -R git:git /home/git/
+
+* set the username and email for git
+
+  # sudo su git
+  # git config --global user.email "you@example.com"
+  # git config --global user.name "Your Name"

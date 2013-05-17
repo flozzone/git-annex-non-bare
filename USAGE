@@ -1,0 +1,41 @@
+---------------------------------------------------------
+
+Checkout and work with the repository
+
+- clone and initialize the repository
+
+  # git clone git@localhost:my-repo.git
+  # cd my-repo
+
+# initialize git-annex with a name for this clone
+
+  # git annex init "my-username"
+
+- work with it: Add binary files
+
+  # cp /media/sound/sound.mp3 .
+  # git annex add sound.mp3
+
+- work with it: Add other stuff
+
+  # echo test > test
+
+- commit your changes
+
+  # git add test
+  # git commit -m test
+
+  # NOTICE: Don't use push to push your changes to the server. Use "git annex sync" instead, it will do
+  # the push for you.
+
+- push your changes to git stuff (data is not copied)
+
+  # git annex sync
+
+- copy added data to the origin server (data gets copied to the server)
+
+  # git annex copy --to origin
+
+- drop uploaded files from local machine (data gets deleted from local machine but is still on the server)
+
+  # git annex drop .

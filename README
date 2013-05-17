@@ -7,10 +7,11 @@ git annex to delete data from annexed files
 - symlinks of annexed files stay valid
 - no copied data gets deleted from the server
 
-####################
-# TODO
-####################
- - spcial: Add check for broken symlinks in the repo:
+---------------------------------------------------------
+
+TODO
+
+ - special: Add check for broken symlinks in the repo:
      client hook: Needs to be installed by the client
      server hook: Possibility of corrupted data while testing (possible solution
      check out into another directory and check the files and links there.)
@@ -25,9 +26,10 @@ git annex to delete data from annexed files
    instead of directly in the home directory of the git user.
  - create gitolite like administration
 
-####################
-# DRAWBACKS
-####################
+---------------------------------------------------------
+
+Drawbacks
+
  - published data is corrupt in the time between the client issues the commands
    "git annex sync" and "git annex copy --to origin". Because the symlinks of annexed
    files will be broken.
@@ -38,72 +40,4 @@ git annex to delete data from annexed files
       - change GIT_WORKDIR to another directory
    it would result in broken annexed file links. (needs to be further tested)
 
-####################
-# SETUP
-####################
-sudo apt-get install git-core
-sudo apt-get install git-annex
-
-- The following steps assume you have checked this repo in /tmp/git-annex-non-bare
-
-- Add a user to your system
-sudo adduser git
-
-- Now you’ll need to add your public key to the Git user’s authorized_keys:
-sudo mkdir /home/git/.ssh
-sudo touch /home/git/.ssh/authorized_keys
-sudo chown -R git:git /home/git/.ssh
-sudo chmod 700 /home/git/.ssh
-sudo chmod 600 /home/git/.ssh/*
-
-- Copy git-start.sh script over and rest for later usage
-sudo cp /tmp/git-annex-non-bare/* /home/git
-sudo chown git:git /home/git/*
-
-####################
-# ADD A USER TO GET ACCESS TO THE REPOSITORIES
-####################
-sudo vim /home/git/.ssh/authorized_keys
-
-- a single line for every user
------------
-command="~/git-start.sh",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty [HERE COMES THE PUBLIC KEY OF THE USER TO ADD]
------------
-
-- this will block the user to get a shell and restrict to only use git
-
-example:
------------
-command="~/git-start.sh",no-port-forwarding,no-X11-forwarding,no-agent-forwarding,no-pty ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCwStpCbxttFD7YE/XspmaoGLEo09VcFobIDgu/+pk/ncDxQwLsWEySybAQN8GJ0EB9AFcIudZFVBLVbSvh3RJ8M6nOT/t67briZNd9BAVTFAUHdzGTZhNL7fvpWaEzQ095BCWi6k9Ol9XgBs5pjrJgMX+Jw6+g0ZWE0CBzPllt4dZoQEXMagi0uocSDgWtVYI08LKdj/QUCjtJYKDIOujRNP8sv/+WZ0gVhu9ENwTzJg6SJV0p2cfHuS9P9Qe9NxQ3XwQcvVXzPUVazInrb+I9S4lZGPPPTYTDcORmwkhvdgBBrKYytsJmkXKh/3S88Sd1bHm3Wr8bYy+Axt601yyF flozzone@gmail.com
------------
-
-####################
-# ADD A REPOSITORY
-####################
-login git
-cd
-mkdir my-repo.git
-cd my-repo.git
-git init
-git annex init "server"
-
-- copy the post-receive hook in the right place
-sudo cp ~/post-receive .git/hooks 
-
-- be sure that it is executable
-chmod +x .git/hooks/post-receive
-
-####################
-# CHECKOUT AND WORK WITH THE REPOSITORY
-####################
-git clone git@localhost:my-repo.git
-cd my-repo
-git annex init "my-username"
-cp /media/sound/sound.mp3 .
-git annex add sound.mp3
-echo test > test
-git add test
-git commit -m test
-git annex sync
-git annex copy --to origin
-git annex drop .
+Follow the instructions in INSTALLATION, MAINTENANCE, USAGE to continue.
