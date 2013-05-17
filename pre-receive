@@ -1,0 +1,50 @@
+#!/bin/bash
+
+#
+# Checks if newly created links (git annexed data) point to an existing file
+# on the server. This prevents the user from running "git annex sync" before
+# git annex copy --to origin, so the repository on the server has always a consistent
+# working directory.
+#
+
+# change into working directory
+cd ..
+unset GIT_DIR
+
+# loop over all pushed branches
+while read oldrev newrev refname
+do
+
+	# check only if pushed to synced/master branch
+	if [ "$refname" == "refs/heads/synced/master" ] ; then
+
+		# loop over all changed files
+		while read srcmode dstmode srcsha dstsha status path ; do
+
+			# check if the created file is a symbolic link - like created by git-annex
+			if [ "$dstmode" == "120000" ]; then
+
+				# get the link relative to repository root
+				if ! link=$(git cat-file blob $dstsha | egrep -o '\.git.*') ; then
+					echo 1>&2 ""
+					echo 1>&2 "Could not get blob for $dstsha"
+					echo 1>&2 ""
+				fi
+
+				# checks if the file exists where the link points to
+				if [ ! -f "$link" ] ; then
+					echo 1>&2 ""
+					echo 1>&2 "There is no data for \"$path\" on the server"
+					echo 1>&2 "Upload the data by issuing \"git annex copy --to origin\""
+					echo 1>&2 "and than try again."
+					echo 1>&2 ""
+					exit 1
+				fi
+			fi
+		done < <(git diff-tree -r --oneline $oldrev $newrev | sed 's/\t/ /g')
+	fi
+
+done
+ 
+# everything went OK so we can exit with a zero
+exit 0
